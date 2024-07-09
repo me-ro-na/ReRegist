@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+	
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%boldWhite(%d{HH:mm:ss.SSS}) %highlight(%5level) %cyan([%40.40c]) %yellow(%msg%n)</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/sicnas/allnewpis/wisenut/ichat/log/chatbot.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/sicnas/allnewpis/wisenut/ichat/log/booking.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+        	<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level {%thread{10}} [%logger{20}] %m%n </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="egovframework.*" level="debug" />
+    <logger name="org.springframework.web.servlet.view.JstlView" level="off" />
+	
+	<logger name="org.springframework" level="debug" />
+	<logger name="org.springframework.web.bind.annotation.support.HandlerMethodInvoker" level="debug" />
+	<logger name="org.springframework.web.servlet.DispatcherServlet" level="debug" />
+	
+	<logger name="jdbc.sqlolny" 	level="debug"></logger>
+    <logger name="jdbc.sqltiming" 	level="debug"></logger>
+    <logger name="jdbc.audit" 		level="ERROR"></logger>
+    <logger name="jdbc.resultset" 	level="ERROR"></logger>
+	
+    <root level="debug">
+        <appender-ref ref="CONSOLE"/> <!-- Console에 로그를 출력하고자 할 때 사용 -->
+        <appender-ref ref="FILE"/> <!-- File로 로그를 남기고자 할 때 사용 -->
+    </root>
+
+</configuration>

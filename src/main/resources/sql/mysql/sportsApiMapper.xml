@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sportsApi">
+	<select id="selectApiInfo" parameterType="java.util.HashMap" resultType="egovframework.iChat.sportsApi.entity.ApiCodeEntity">
+		SELECT API_TYPE
+			 , API_NAME
+			 , API_CODE
+             , API_URL
+             , API_DESC
+		  FROM WISE_API_CODE
+		 WHERE 1=1
+		   <if test="type != null and type !=''">
+		   AND API_TYPE=#{apiType}		 
+		   </if>
+	</select>
+</mapper>

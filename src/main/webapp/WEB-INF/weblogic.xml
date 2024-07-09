@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app xmlns="http://xmlns.oracle.com/weblogic/weblogic-web-app">
+    <session-descriptor>
+        <timeout-secs>600</timeout-secs>
+        <invalidation-interval-secs>20</invalidation-interval-secs>
+        <persistent-store-type>replicated_if_clustered</persistent-store-type>
+        <sharing-enabled>true</sharing-enabled>
+    </session-descriptor>
+</weblogic-web-app>
