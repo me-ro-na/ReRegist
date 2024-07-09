@@ -1,0 +1,50 @@
+{{#exist list}}
+<section id="{{stId}}-{{uuid}}" class="bot_form">
+    <form class="api_form">
+        <div class="tbl_box_wrap">
+            <table class="tbl_basic">
+                <thead>
+                <tr>
+                    <th style="min-width: 45px;">종목</th>
+                    <th style="min-width: 75px;">신청일</th>
+                    <th style="min-width: 65px;">신청누적점수</th>
+                    <th style="min-width: 65px;">신청훈격</th>
+                    <th style="min-width: 65px;">처리상태</th>
+                    <th style="min-width: 65px;">거부사유</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each list}}
+                <tr class="{{#ifCond @index '>=' 3}}hide{{/ifCond}}">
+                    <td class="text-center">{{this.PCLASS_NM}}</td>
+                    <td class="text-center">{{yyyyMMdd this.APP_DT}}</td>
+                    <td class="text-center">{{this.POINT}}</td>
+                    <td class="text-center">{{this.PRIZE_NM}}</td>
+                    <td class="text-center">{{this.STATUS}}</td>
+                    <td class="text-center">{{dash this.REJECT_REASON}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <div class="tbl_btn_group">
+                <a href="#" class="btn next"><span class="ico_comm ico_next">다음화면</span></a>
+                <a href="#" class="btn prev"><span class="ico_comm ico_prev">이전화면</span></a>
+            </div>
+        </div>
+        {{#ifCond list.length '>=' 3}}
+        <a href="javascript:;" type="button" class="btn_inner all" data-more_cnt="3" onclick="pageFn.more(this); return false;" title="테이블 내역 더보기"><span>내역 더보기</span></a>
+        {{/ifCond}}
+        <div class="result_btn_group">
+            <button type="button" class="btn_feedback_detail btn_api" onclick="apiHelper.move('HNR'); return false;" title="훈·포장 시스템으로 이동">훈·포장 시스템으로 이동</button>
+        </div>
+    </form>
+</section>
+{{/exist}}
+{{^list}}
+<div class="txt_tit">훈·포장 신청내역이 없습니다.</div>
+<p>등록된 선수/지도자 이력을 조회할 수 없습니다. 회원종목단체에서 등록한 훈포장 대상자만 조회가 가능합니다.</p>
+<p>보다 상세한 내용은 체육발전 유공 훈·포장 시스템에서 확인해주세요</p>
+<div class="result_btn_group">
+    <button type="button" class="btn_feedback_detail btn_api" onclick="apiHelper.move('HNR'); return false;" title="훈·포장 시스템으로 이동">훈·포장 시스템으로 이동</button>
+</div>
+{{/list}}

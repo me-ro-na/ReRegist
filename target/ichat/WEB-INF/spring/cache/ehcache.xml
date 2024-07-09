@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/xmlSchema-instance"
+		xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" updateCheck="false">
+
+	<!-- 임시저장 경로를 설정 -->
+	<diskStore path="java.io.tmpdir" />
+	
+	<!-- 
+		Cache에 저장할 레퍼런스의 최대값을 100000으로 지정
+		maxDepthExceededBehavior = "continue" : 초과된 깊이에 대하여 경고하지만 크기가 조정 된 요소를 계속 탐색
+	 -->
+	<sizeOfPolicy maxDepth="100000" maxDepthExceededBehavior="continue" />
+	
+	<!-- default Cache 설정 -->
+	<!-- 
+		eternal = "true" : 캐시가 영속적임
+		overflowToDisk = "false" : 오버플로우된 항목에 대하여 disk에 저장할 지 여부
+		memoryStoreEvictionPolicy = "LRU" : 캐시의 객체 수가 maxEntriesLocalHeap에 도달하면, 가장 오랫동안 호출되지 않은 캐시를 삭제
+	 -->
+	<defaultCache
+		eternal="true" 
+		overflowToDisk="false"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU">
+	</defaultCache>
+	
+	<cache name="scenarioCache"
+		eternal="false" 
+		timeToIdleSeconds="300"
+		timeToLiveSeconds="300"
+		maxEntriesLocalHeap="100"
+		maxEntriesLocalDisk="1000"
+		overflowToDisk="false"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU">
+	</cache>
+	
+	<cache name="categoryCache"
+		eternal="false" 
+		timeToIdleSeconds="300"
+		timeToLiveSeconds="300"
+		maxEntriesLocalHeap="100"
+		maxEntriesLocalDisk="1000"
+		overflowToDisk="false"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU">
+	</cache>
+	
+	<cache name="domCache"
+		eternal="false" 
+		timeToIdleSeconds="300"
+		timeToLiveSeconds="300"
+		maxEntriesLocalHeap="100"
+		maxEntriesLocalDisk="1000"
+		overflowToDisk="false"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU">
+	</cache>
+		
+		
+</ehcache>

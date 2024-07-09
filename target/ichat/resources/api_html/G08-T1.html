@@ -1,0 +1,25 @@
+<section id="{{stId}}-{{uuid}}" class="bot_form">
+    <form class="api_form" id="f{{uuid}}">
+        <div class="select_box_wrap">
+            <div class="select_group w80">
+                <div class="select_wrap">
+                    <div class="select_box">
+                        <select class="inp_sel w100" name="searchStartDt" title="년도">
+                            {{#each codes.years}}
+                            <option label="{{this.label}}" value="{{this.value}}">{{this.label}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="select_group w236">
+                <div class="select_wrap">
+                    <div class="inp_detail_box w100">
+                        <input type="text" class="inp_detail w100" name="searchTitle" placeholder="예)대회명을 입력해주세요"/>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn_feedback_detail btn_api" onclick="apiHelper.{{type}}.next(); return false;" title="조회">조회</button>
+        </div>
+    </form>
+</section>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RESULT>
+<RESULT_CODE>0000000</RESULT_CODE>
+<RESULT_MSG><![CDATA[]]></RESULT_MSG>
+<DATA>
+
+<PINFO>			
+	<INFO_GB><![CDATA[기본정보]]></INFO_GB>
+	<INFO_NM><![CDATA[이름]]></INFO_NM>	
+	<INFO_CONT><![CDATA[홍길동]]></INFO_CONT>		
+</PINFO>
+<PINFO>			
+	<INFO_GB><![CDATA[기본정보]]></INFO_GB>
+	<INFO_NM><![CDATA[생년월일]]></INFO_NM>	
+	<INFO_CONT><![CDATA[1980.01.01]]></INFO_CONT>		
+</PINFO>
+<PINFO>			
+	<INFO_GB><![CDATA[기본정보]]></INFO_GB>
+	<INFO_NM><![CDATA[체육인번호]]></INFO_NM>	
+	<INFO_CONT><![CDATA[800101-1BC0258]]></INFO_CONT>		
+</PINFO>
+<PINFO>			
+	<INFO_GB><![CDATA[기본정보]]></INFO_GB>
+	<INFO_NM><![CDATA[최종등록정보]]></INFO_NM>	
+	<INFO_CONT><![CDATA[2023년 2월 1일]]></INFO_CONT>		
+</PINFO>
+
+
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[출생지]]></INFO_NM>	
+	<INFO_CONT><![CDATA[서울]]></INFO_CONT>		
+</PINFO>
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[이름(한문)]]></INFO_NM>	
+	<INFO_CONT><![CDATA[洪吉童]]></INFO_CONT>		
+</PINFO>
+
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[신장]]></INFO_NM>	
+	<INFO_CONT><![CDATA[170Cm]]></INFO_CONT>		
+</PINFO>
+
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[체중]]></INFO_NM>	
+	<INFO_CONT><![CDATA[70kg]]></INFO_CONT>		
+</PINFO>
+
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[영문명(성)]]></INFO_NM>	
+	<INFO_CONT><![CDATA[Hong]]></INFO_CONT>		
+</PINFO>
+
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[영문명(이름)]]></INFO_NM>	
+	<INFO_CONT><![CDATA[Gil-dong]]></INFO_CONT>		
+</PINFO>
+
+
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[학년]]></INFO_NM>	
+	<INFO_CONT><![CDATA[3]]></INFO_CONT>		
+</PINFO>
+
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[시력(좌)]]></INFO_NM>	
+	<INFO_CONT><![CDATA[0.7]]></INFO_CONT>		
+</PINFO>
+
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[시력(우)]]></INFO_NM>	
+	<INFO_CONT><![CDATA[0.7]]></INFO_CONT>		
+</PINFO>
+
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[이메일]]></INFO_NM>	
+	<INFO_CONT><![CDATA[test@test.com]]></INFO_CONT>		
+</PINFO>
+
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[휴대폰]]></INFO_NM>	
+	<INFO_CONT><![CDATA[010-1234-1234]]></INFO_CONT>		
+</PINFO>
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[자택주소]]></INFO_NM>	
+	<INFO_CONT><![CDATA[서울특별시 성동구 연무장5길 9-16]]></INFO_CONT>		
+</PINFO>
+
+<PINFO>			
+	<INFO_GB><![CDATA[신상정보]]></INFO_GB>
+	<INFO_NM><![CDATA[비고]]></INFO_NM>	
+	<INFO_CONT><![CDATA[TEST]]></INFO_CONT>		
+</PINFO>
+
+
+<EXTRA_INFO>
+	<INFO>
+		<INFO_GB><![CDATA[소속팀]]></INFO_GB>
+		<INFO_NM><![CDATA[소속팀명]]></INFO_NM>	
+		<INFO_CONT><![CDATA[(전문)테스트팀]]></INFO_CONT>	
+	</INFO>
+	<INFO>
+		<INFO_GB><![CDATA[소속팀]]></INFO_GB>
+		<INFO_NM><![CDATA[입단일]]></INFO_NM>	
+		<INFO_CONT><![CDATA[2024.01.01]]></INFO_CONT>		
+	</INFO>
+	<INFO>
+		<INFO_GB><![CDATA[소속팀]]></INFO_GB>
+		<INFO_NM><![CDATA[세부종목]]></INFO_NM>	
+		<INFO_CONT><![CDATA[단체전]]></INFO_CONT>	
+	</INFO>
+</EXTRA_INFO>
+
+
+
+	
+<EXTRA_INFO>
+	<INFO>
+		<INFO_GB><![CDATA[학력정보]]></INFO_GB>
+		<INFO_NM><![CDATA[학교명]]></INFO_NM>	
+		<INFO_CONT><![CDATA[성균관대학교]]></INFO_CONT>		
+	</INFO>
+	<INFO>
+		<INFO_GB><![CDATA[학력정보]]></INFO_GB>
+		<INFO_NM><![CDATA[학교주소]]></INFO_NM>	
+		<INFO_CONT><![CDATA[서울특별시 성동구 연무장6길 9]]></INFO_CONT>		
+	</INFO>
+	<INFO>
+		<INFO_GB><![CDATA[학력정보]]></INFO_GB>
+		<INFO_NM><![CDATA[재학기간]]></INFO_NM>	
+		<INFO_CONT><![CDATA[2000.01.01~2002.02.02]]></INFO_CONT>		
+	</INFO>
+	<INFO>
+		<INFO_GB><![CDATA[학력정보]]></INFO_GB>
+		<INFO_NM><![CDATA[상태]]></INFO_NM>	
+		<INFO_CONT><![CDATA[재학중]]></INFO_CONT>		
+	</INFO>
+</EXTRA_INFO>
+
+<EXTRA_INFO>
+	<INFO>			
+		<INFO_GB><![CDATA[학력정보]]></INFO_GB>
+		<INFO_NM><![CDATA[학교명]]></INFO_NM>	
+		<INFO_CONT><![CDATA[한국대학교]]></INFO_CONT>
+	</INFO>
+	<INFO>			
+		<INFO_GB><![CDATA[학력정보]]></INFO_GB>
+		<INFO_NM><![CDATA[학교주소]]></INFO_NM>	
+		<INFO_CONT><![CDATA[서울특별시 성동구 연무장6길 12]]></INFO_CONT>		
+	</INFO>
+	<INFO>			
+		<INFO_GB><![CDATA[학력정보]]></INFO_GB>
+		<INFO_NM><![CDATA[재학기간]]></INFO_NM>	
+		<INFO_CONT><![CDATA[2000.01.01~2002.02.02]]></INFO_CONT>		
+	</INFO>
+	<INFO>			
+		<INFO_GB><![CDATA[학력정보]]></INFO_GB>
+		<INFO_NM><![CDATA[상태]]></INFO_NM>	
+		<INFO_CONT><![CDATA[재학중]]></INFO_CONT>		
+	</INFO>
+	<INFO>			
+		<INFO_GB><![CDATA[학력정보]]></INFO_GB>
+		<INFO_NM><![CDATA[최종학력여부]]></INFO_NM>	
+		<INFO_CONT><![CDATA[예]]></INFO_CONT>		
+	</INFO>		
+</EXTRA_INFO>	
+
+
+</DATA>
+</RESULT>
+
+
+

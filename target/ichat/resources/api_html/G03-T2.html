@@ -1,0 +1,51 @@
+<section id="{{stId}}-{{uuid}}" class="bot_form">
+    <form class="api_form">
+        {{#if list}}
+        <div class="tbl_box_wrap">
+            <table class="tbl_basic long">
+                <thead>
+                    <tr>
+                        <th style="min-width: 45px">번호</th>
+                        <th style="min-width: 60px">종별</th>
+                        <th style="min-width: 100px">증명서 종류</th>
+                        <th style="min-width: 80px">신청일</th>
+                        <th style="min-width: 80px">발급일</th>
+                        <th style="min-width: 65px">결제금액</th>
+                        <th style="min-width: 65px">결제종류</th>
+                        <th style="min-width: 65px">처리상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{#each list}}
+                <tr class="{{#ifCond @index '>=' 3}}hide{{/ifCond}}">
+                    <td class="text-center">{{this.NO}}</td>
+                    <td class="text-center">{{this.PCLASS_NM}}</td>
+                    <td class="text-center">{{this.CERT_KIND_NM}}</td>
+                    <td class="text-center">{{yyyyMMdd this.APP_DT}}</td>
+                    <td class="text-center">{{yyyyMMdd this.PRT_DT}}</td>
+                    <td class="text-center">{{comma this.PAY_SUM}}</td>
+                    <td class="text-center">{{dash this.PAY_KIND_NM}}</td>
+                    <td class="text-center">{{this.STATUS}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <div class="tbl_btn_group">
+                <a href="#" class="btn next"><span class="ico_comm ico_next">다음화면</span></a>
+                <a href="#" class="btn prev"><span class="ico_comm ico_prev">이전화면</span></a>
+            </div>
+        </div>
+        {{else}}
+        <div class="no_result_box">
+            <p class="no_result_txt">발급신청 이력이 없습니다.</p>
+        </div>
+        {{/if}}
+        {{#ifCond list.length '>=' 3}}
+        <a href="javascript:;" type="button" class="btn_inner all" data-more_cnt="3" onclick="pageFn.more(this); return false;" title="테이블 내역 더보기"><span>내역 더보기</span></a>
+        {{/ifCond}}
+        <div class="result_btn_group">
+            <button type="button" class="btn_feedback_detail btn_api" onclick="apiHelper.move('P','CERT'); return false;" title="상세정보조회">상세정보조회</button>
+            <button type="button" class="btn_feedback_detail btn_api" onclick="apiHelper.{{type}}.next(); return false;" title="조건변경">조건변경</button>
+        </div>
+    </form>
+</section>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sports">
+
+    <!-- 스포츠지원포털로 sso 전달 전 데이터 insert -->
+    <insert id="makeSso" statementType="CALLABLE" parameterType="egovframework.iChat.sportsApi.dto.LoginVO">
+        {
+            CALL COMMN.PKG_CHAT.PS_SSO_G1 (
+                #{sessionId}, #{ci}, #{userName}, #{birthDt}, #{genderCode},
+                #{ipinVno}, #{certMethod}, #{mobileNo}, #{nationalInfo},
+                #{targetUrl}, 'CHAT', #{pclassCd}
+            )
+        }
+    </insert>
+
+    <!-- makeSso
+        DECLARE
+            T_CNT NUMBER;
+        BEGIN
+
+            SELECT COUNT(*)
+            INTO T_CNT
+            FROM COMMN.WEB_SSO_TRS_INF
+            WHERE SESN_ID = #{sessionId};
+
+            IF T_CNT > 0 THEN
+                DELETE
+                FROM COMMN.WEB_SSO_TRS_INF
+                WHERE SESN_ID = #{sessionId};
+            END IF;
+
+            INSERT INTO COMMN.WEB_SSO_TRS_INF (SESN_ID, HSLF_CERT_KEY_ENCPT_VL, HAN_NM, BRTH, SEX_CD, ATLE_NO,
+                                         CERT_MTH_CD, CPNB, DNFN_CD,
+                                         MVN_URL, URL_PARAMT, EVFX_CD,
+                                         CRE_DTTM, MEM_ID)
+            VALUES (#{sessionId}, #{ci}, #{userName}, #{birthDt}, #{genderCode},
+                    #{ipinVno}, #{certMethod}, #{mobileNo}, #{nationalInfo},
+                    #{targetUrl}, 'CHAT', #{pclassCd},
+                    TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'), #{userId});
+
+            COMMIT;
+
+        END;
+    -->
+
+    <!-- SSO 정보 조회 -->
+    <select id="selectSsoInfo" parameterType="egovframework.iChat.sportsApi.dto.LoginVO" resultType="egovframework.iChat.sportsApi.dto.LoginVO">
+        SELECT SESN_ID AS SESSION_ID
+             , HSLF_CERT_KEY_ENCPT_VL AS CI
+             , MEM_ID AS USER_ID
+             , HAN_NM AS USER_NAME
+             , BRTH AS BIRTH_DT
+             , SEX_CD AS GENDER_CODE
+             , DECODE(SEX_CD, '0', 'W', '1', 'M', NULL) AS SEX
+             , ATLE_NO AS IPIN_VNO
+             , CERT_MTH_CD AS CERT_METHOD
+             , CPNB AS MOBILE_NO
+             , DNFN_CD AS NATIONAL_INFO
+             , EVFX_CD AS PCLASS_CD
+             , NULL AS PCLASS_NM
+             , URL_PARAMT AS REGISTER_GB
+             , MVN_URL AS TARGET_URL
+             , (SELECT CODE_FG FROM PSS.PSSCODEM WHERE MAJOR_CD = '001' AND MINOR_CD = A.EVFX_CD) AS ORG_CD
+             , NULL AS ORG_NM
+          FROM COMMN.WEB_SSO_TRS_INF A
+         WHERE SESN_ID = #{key}
+    </select>
+
+    <!-- SSO 정보 삭제 -->
+    <delete id="deleteSsoInfo" parameterType="egovframework.iChat.sportsApi.dto.LoginVO">
+        DELETE
+          FROM COMMN.WEB_SSO_TRS_INF A
+         WHERE SESN_ID = #{key}
+    </delete>
+
+    <!-- 본인인증 결과 저장 -->
+    <insert id="insertAuthResult" statementType="CALLABLE" parameterType="egovframework.iChat.sportsApi.dto.LoginVO" >
+        {
+            CALL COMMN.PKG_CHAT.PS_AUTH_RESULT_NEW(
+                #{ci}, #{userName}, #{birthDt}, #{genderCode}, #{certMethod},
+                #{mobileNo}, #{ipinVno}, #{nationalInfo}
+            )
+        }
+    </insert>
+
+    <!-- insertAuthResult
+        /*
+        DECLARE
+            V_CI                VARCHAR2(250);
+            V_KOR_NM            VARCHAR2(300);
+            V_BIRTH_DT          VARCHAR2(8);
+            V_GENDER            VARCHAR2(1);
+            V_AUTH_KIND         VARCHAR2(10);
+            V_MOBILE_NO         VARCHAR2(300);
+            V_VNO               VARCHAR2(200);
+            V_NATIONAL_INFO     VARCHAR2(1);
+            TMP_CNT             NUMBER;
+        BEGIN
+
+            V_CI := #{ci};
+            V_KOR_NM := #{userName};
+            V_BIRTH_DT := #{birthDt};
+            V_GENDER := #{genderCode};
+            V_AUTH_KIND := #{certMethod};
+            V_MOBILE_NO := #{mobileNo};
+            V_VNO := #{ipinVno};
+            V_NATIONAL_INFO := #{nationalInfo};
+
+            SELECT COUNT(*)
+            INTO TMP_CNT
+            FROM PPL.PPL_HSLF_COFM_INF
+            WHERE HSLF_CERT_KEY_ENCPT_VL = V_CI;
+
+            IF TMP_CNT = 0 THEN
+                INSERT INTO PPL.PPL_HSLF_COFM_INF (HSLF_CERT_KEY_ENCPT_VL, HAN_NM, BRTH, SEX_CD, VRT_JUMIN_NO,
+                                                   CERT_MTH_CD, CPNB, CRE_DTTM, UPD_DTTM, DNFN_CD)
+                VALUES (V_CI, V_KOR_NM, V_BIRTH_DT, V_GENDER, V_VNO,
+                        V_AUTH_KIND, V_MOBILE_NO, TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'),
+                        TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'), V_NATIONAL_INFO);
+
+            ELSE
+                IF V_AUTH_KIND = 'MOBILE' THEN
+                    UPDATE PPL.PPL_HSLF_COFM_INF
+                    SET HAN_NM      = V_KOR_NM,
+                        BRTH        = V_BIRTH_DT,
+                        SEX_CD      = V_GENDER,
+                        CERT_MTH_CD = V_AUTH_KIND,
+                        CPNB        = V_MOBILE_NO,
+                        DNFN_CD     = V_NATIONAL_INFO,
+                        UPD_DTTM    = TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+                    WHERE HSLF_CERT_KEY_ENCPT_VL = V_CI;
+                ELSE
+                    UPDATE PPL.PPL_HSLF_COFM_INF
+                    SET HAN_NM   = V_KOR_NM,
+                        BRTH     = V_BIRTH_DT,
+                        SEX_CD   = V_GENDER,
+                        DNFN_CD  = V_NATIONAL_INFO,
+                        UPD_DTTM = TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+                    WHERE HSLF_CERT_KEY_ENCPT_VL = V_CI;
+                END IF;
+            END IF;
+
+            COMMIT;
+
+        END;
+        */
+    -->
+
+</mapper>

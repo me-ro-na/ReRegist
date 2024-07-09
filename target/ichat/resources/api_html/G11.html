@@ -1,0 +1,42 @@
+{{#if transfer.length}} <!-- 이적 신청 이력이 궁금해요 -->
+<section id="{{stId}}-{{uuid}}" class="bot_form">
+    <form class="api_form">
+        {{#each transfer}}
+        <div class="tbl_box_wrap {{#ifCond @index '>=' 2}}hide{{/ifCond}}">
+            <table class="tbl_basic right">
+                <caption class="screen_out">신청일,승인상태,현소속팀,이적할팀</caption>
+                <tbody>
+                <tr>
+                    <th>신청일</th>
+                    <td class="bdt_none">{{this.CRT_DT}}</td>
+                </tr>
+                <tr>
+                    <th class="bd_top">승인상태</th>
+                    <td>{{this.APV_NM}}</td>
+                </tr>
+                <tr>
+                    <th class="bd_top">현소속팀</th>
+                    <td>{{this.PRE_TEAM_NM}} (팀코드: {{this.PRE_TEAM_CD}} / 종별:  {{this.PRE_KIND_NM}} / 시도: {{this.PRE_SIDO_NM}})</td>
+                </tr>
+                <tr>
+                    <th class="bd_top">이적할팀</th>
+                    <td>{{this.TEAM_NM}} (팀코드: {{this.TEAM_CD}} / 종별:  {{this.KIND_NM}} / 시도: {{this.SIDO_NM}})</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        {{/each}}
+        {{#ifCond transfer.length '>' 2}}
+        <a href="javascript:;" type="button" class="btn_inner all" data-more_cnt="2" onclick="pageFn.more(this); return false;" title="테이블 내역 더보기"><span>내역 더보기</span></a>
+        {{/ifCond}}
+    </form>
+</section>
+<hr style="border: 1px solid gray;">
+<p>이적신청서 출력, 수정 등 상세 작업을 위해서는 아래 버튼을 클릭하셔서 경기인 등록 화면으로 이동하셔야 합니다.</p>
+<a href="javascript:;" class="btn_inner link outer" onclick="goLink('https://g1.sports.or.kr/pinfo/index/sc000.do'); return false;" title="경기인 등록 화면으로 이동">경기인 등록 화면으로 이동</a>
+{{/if}}
+{{^transfer}}
+<div class="no_result_box">
+    <p class="no_result_txt">소속변경(이적) 신청이력이 없습니다.</p>
+</div>
+{{/transfer}}

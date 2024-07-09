@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="tspbot" basedir=".">
+	
+	<property name="tomcat_home"   value="C:\LX_DEV\apache-tomcat-8.5.32"/> 
+	<property name="configure"     value="src/main/resources"/>
+	
+	<path id="compile.classpath">
+        <fileset dir="C:\LX_DEV\workspace_1\LxBot_lib">
+            <include name="*.jar"/>
+        </fileset>
+		<fileset dir="${tomcat_home}/lib">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+     
+    <target name="init" depends="clean">
+        <mkdir dir="build/classes"/>
+        <mkdir dir="dist" />
+    </target>
+	 
+    <target name="compile" depends="init" >
+        <javac destdir="build/classes" debug="true" srcdir="src/main/java" encoding="utf-8" includeantruntime="false">
+            <classpath refid="compile.classpath"/>
+        	<compilerarg value="-Xlint:unchecked"/>
+        </javac>
+    	<copy todir="build/classes">
+            <fileset dir="${configure}">
+            	<exclude name="META-INF"/>
+            </fileset>
+        </copy>
+    </target>
+     
+    <target name="war" depends="compile">
+        <war destfile="dist/Tspxbot.war" webxml="src/main/webapp/WEB-INF/web.xml">
+            <fileset dir="src/main/webapp"/>
+            <lib dir="C:\LX_DEV\workspace_1\LxBot_lib"/>
+            <classes dir="build\classes"/>
+        </war>
+    </target>
+    
+    <target name="clean">
+        <delete dir="dist" />
+        <delete dir="build" />
+    </target>
+</project>

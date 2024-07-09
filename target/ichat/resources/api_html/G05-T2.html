@@ -1,0 +1,50 @@
+<section id="{{stId}}-{{uuid}}" class="bot_form">
+    <form class="api_form">
+        {{#if list}}
+        <div class="tbl_box_wrap">
+            <table class="tbl_basic long">
+                <thead>
+                    <tr>
+                        <th style="min-width: 65px">구분</th>
+                        <th style="min-width: 65px">등록년도</th>
+                        <th style="min-width: 60px">종목</th>
+                        <th style="min-width: 50px">종별</th>
+                        <th style="min-width: 50px">시도</th>
+                        <th style="min-width: 100px">소속팀명</th>
+                        <th style="min-width: 115px">개인번호</th>
+                        <th style="min-width: 80px">등록일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{#each list}}
+                <tr class="{{#ifCond @index '>=' 3}}hide{{/ifCond}}">
+                    <td class="text-center">{{this.GUBUN_NM}}</td>
+                    <td class="text-center">{{this.REG_YEAR}}</td>
+                    <td class="text-center">{{this.PCLASS_NM}}</td>
+                    <td class="text-center">{{dash this.KIND_NM}}</td>
+                    <td class="text-center">{{this.SIDO_NM}}</td>
+                    <td class="text-center">{{dash this.TEAM_NM}}</td>
+                    <td class="text-center">{{this.PERSON_NO}}<br/>({{this.VNO}})</td>
+                    <td class="text-center">{{yyyyMMdd this.AGREE_DT}}</td>
+                </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <div class="tbl_btn_group">
+                <a href="#" class="btn next"><span class="ico_comm ico_next">다음화면</span></a>
+                <a href="#" class="btn prev"><span class="ico_comm ico_prev">이전화면</span></a>
+            </div>
+        </div>
+        {{else}}
+        <div class="no_result_box">
+            <p class="no_result_txt">경기인 등록 이력이 없습니다.</p>
+        </div>
+        {{/if}}
+        {{#ifCond list.length '>=' 3}}
+        <a href="javascript:;" type="button" class="btn_inner all" data-more_cnt="3" onclick="pageFn.more(this); return false;" title="테이블 내역 더보기"><span>내역 더보기</span></a>
+        {{/ifCond}}
+        <div class="result_btn_group">
+            <button type="button" class="btn_feedback_detail btn_api" onclick="apiHelper.{{type}}.next(); return false;" title="조건변경">조건변경</button>
+        </div>
+    </form>
+</section>
