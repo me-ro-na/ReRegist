@@ -86,10 +86,10 @@ public class SportsApiController {
 		try {				
 			result = sportsApiService.requestApi(dto);
 		} catch (IChatException | PersistenceException ex) {
-			if(ex.getMessage().contains(SportsApiConfig.UNVALID_USER.getValue())) {
-				return new ResponseEntity<Object>(ex.getMessage(), getHeader(), HttpStatus.FORBIDDEN);
+			if(ex.getCause().getMessage().contains(SportsApiConfig.UNVALID_USER.getValue())) {
+				return new ResponseEntity<Object>(SportsApiConfig.UNVALID_USER.getValue(), getHeader(), HttpStatus.FORBIDDEN);
 			}else {
-				return new ResponseEntity<Object>(ex.getCause().getMessage(), getHeader(), HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<Object>(SportsApiConfig.UNKNOWN.getValue(), getHeader(), HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
 		return new ResponseEntity<Object>(result.toString(), getHeader(), HttpStatus.OK);

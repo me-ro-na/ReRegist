@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="feedback">
+	<select id="selectFeedbackSettingDetail" parameterType="String" resultType="HashMap">
+			SELECT
+				QUESTION
+				,QUESTION_YN
+			FROM WISE_FEEDBACK_QUESTION
+			WHERE PROJECTID = #{projectId}
+	</select>
+	<insert id="insertFeedbackHistory" parameterType="egovframework.iChat.ichat.model.FeedbackHistoryVO">
+		INSERT INTO WISE_FEEDBACK_HISTORY
+		(FEEDBACK_SEQ, REG_DATE, FEEDBACK_NO, FEEDBACK_SCORE, FEEDBACK_CONTENT, FEEDBACK_TYPE, PROJECTID, USER_ID, FEEDBACK_SESSION_KEY)
+		VALUES(WISE_FEEDBACK_HISTORY_FEED_SEQ.NEXTVAL, SYSDATE, 1, #{feedbackScore}, #{feedbackContent}, 'S', #{projectId}, '', '')
+	</insert>
+	<insert id="insertIntentFeedback" parameterType="java.util.HashMap">
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+	    	select WISE_FEEDBACk_INTENT_FEEDB_SEQ.NEXTVAL FROM DUAL
+	  	</selectKey>
+		INSERT INTO WISE_FEEDBACK_INTENT
+		(FEEDBACK_SEQ, REG_DATE, INTENT, FEEDBACK_SCORE, PROJECTID, USER_ID, FEEDBACK_SESSION_KEY, USER_QUERY, ANSWER, FEEDBACK_DETAIL)
+		VALUES(#{seq}, SYSDATE, #{intent}, #{score},  #{projectId}, '', #{sessionKey}, #{query} 
+		, #{answer} || (SELECT NVL2(MAX(A.NODE_NM), '*버튼 : ', '') ||  LISTAGG(A.NODE_NM, ', ') WITHIN GROUP(ORDER BY A.ORD) FROM WISE_RESULTMAP A WHERE A.PARENT_SEQ = (SELECT BUILD_SEQ FROM WISE_RESULTMAP WHERE PROJECTID = #{projectId} AND BUILD_NM = #{intent}))
+		, '')
+	</insert>
+	
+	<update id="updateIntentFeedback" parameterType="java.util.HashMap">
+		UPDATE WISE_FEEDBACK_INTENT
+		   SET REG_DATE = SYSDATE
+		     , FEEDBACK_SCORE = #{score}
+		     , FEEDBACK_DETAIL = #{detail}
+		 WHERE FEEDBACK_SEQ = #{seq}
+	</update>
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="feedback">
+		<select id="selectFeedbackSettingDetail" parameterType="String" resultType="HashMap">
+			SELECT
+				QUESTION
+				,QUESTION_YN
+			FROM WISE_FEEDBACK_QUESTION
+			WHERE PROJECTID = #{projectId}
+	</select>
+	<insert id="insertFeedbackHistory" parameterType="egovframework.iChat.ichat.model.FeedbackHistoryVO">
+		INSERT INTO WISE_FEEDBACK_HISTORY
+		(REG_DATE, FEEDBACK_NO, FEEDBACK_SCORE, FEEDBACK_CONTENT, FEEDBACK_TYPE, PROJECTID, USER_ID, FEEDBACK_SESSION_KEY)
+		VALUES(current_timestamp(), 1, #{feedbackScore}, #{feedbackContent}, 'S', #{projectId}, '', '');
+	</insert>
+</mapper>

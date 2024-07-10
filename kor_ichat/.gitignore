@@ -1,9 +1,0 @@
-/bin/
-target/*
-.classpath
-.project
-.settings
-.springBeans
-/target/
-/.idea/
-.DS_Store

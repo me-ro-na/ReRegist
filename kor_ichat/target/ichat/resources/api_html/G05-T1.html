@@ -1,0 +1,41 @@
+<section id="{{stId}}-{{uuid}}" class="bot_form">
+    <form class="api_form" id="f{{uuid}}">
+        <div class="select_box_wrap">
+            <div class="select_group" style="width: 100px;">
+                <div class="select_wrap">
+                    <div class="select_box">
+                        <select class="inp_sel" name="gubun" title="경기인 구분">
+                            {{#each codes.gubun}}
+                            <option label="{{this.label}}" value="{{this.value}}">{{this.label}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="select_group w80">
+                <div class="select_wrap">
+                    <div class="select_box">
+                        <select class="inp_sel" name="searchStartDt" title="조회시작년도">
+                            {{#each codes.years}}
+                            <option label="{{this.label}}" value="{{this.value}}">{{this.label}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <span class="inp_bar">~</span>
+            <div class="select_group w80">
+                <div class="select_wrap">
+                    <div class="select_box">
+                        <select class="inp_sel" name="searchEndDt" title="조회종료년도">
+                            {{#each codes.years}}
+                            <option label="{{this.label}}" value="{{this.value}}">{{this.label}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn_feedback_detail btn_api" onclick="apiHelper.{{type}}.next(); return false;" title="조회">조회</button>
+        </div>
+    </form>
+</section>

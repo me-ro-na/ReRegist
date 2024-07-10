@@ -104,13 +104,18 @@ public class SportsApiService {
 
 				ResourceLoader resourceLoader = new DefaultResourceLoader();
 				Resource resource = resourceLoader.getResource("classpath:/apixml/" + xmlNm + ".xml");
-
-				try (Reader reader = new InputStreamReader(resource.getInputStream(), "UTF-8")) {
-					resultStr = FileCopyUtils.copyToString(reader);
-				} catch (IOException e) {
-					throw new UncheckedIOException(e);
+				
+				if(resource != null && resource.exists()) {
+					try (Reader reader = new InputStreamReader(resource.getInputStream(), "UTF-8")) {
+						resultStr = FileCopyUtils.copyToString(reader);
+					} catch (IOException e) {
+						throw new UncheckedIOException(e);
+					}
+					isXmlFile = true;					
 				}
-				isXmlFile = true;
+				else {
+					LOGGER.error("RESOURCE] classpath:/apixml/" + xmlNm + ".xml does not exist.");
+				}
 			}catch(Exception ee) {
 				LOGGER.error("XML File Read Error.");
 			}

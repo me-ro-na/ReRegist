@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mobile.device.Device;
@@ -40,7 +41,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.iChat.common.exception.IChatException;
 import egovframework.iChat.common.service.CommonService;
-import egovframework.iChat.common.service.RedisService;
 import egovframework.iChat.common.util.AES256Util;
 import egovframework.iChat.common.util.SequenceUtil;
 import egovframework.iChat.common.view.FileDownloadView;
@@ -105,15 +105,10 @@ public class iChatController {
 	@RequestMapping(value = "/iChat", method = {RequestMethod.POST, RequestMethod.GET})
 	public String iChat(Device device, Model model, HttpServletRequest request, HttpSession session) throws Exception {
 		String type = request.getParameter("type");
-		LoginVO sso = null;
+		String key = request.getParameter("key");
+		LoginVO sso = (LoginVO) session.getAttribute("loginVO");
+		String userId = "NOT_LOGIN";
 		AES256Util aes256 = new AES256Util();
-
-		String key = null;
-		if (StringUtils.equalsIgnoreCase("POST", request.getMethod())) {
-			key = request.getParameter("key");
-		}
-		
-		RedisService.test();
 
 		List<String> scripts = new ArrayList<>();
 		List<Map<String, String>> templates = new ArrayList<>();
@@ -127,7 +122,7 @@ public class iChatController {
 		model.addAttribute("scripts", scripts);
 		filePath = context.getRealPath("resources/api_html");
 		for (File file : FileUtils.listFiles(new File(filePath), new String[]{"html"}, false)) {
-			HashMap template = new HashMap();
+			HashMap<String, String> template = new HashMap<>();
 			template.put("id", file.getName().split("\\.")[0]);
 			template.put("contents", FileUtils.readFileToString(file, StandardCharsets.UTF_8));
 			templates.add(template);
@@ -137,68 +132,65 @@ public class iChatController {
 		boolean cbotStatus = true;
 
 		URLCodec codec = new URLCodec();
-		String logSeq = null;
 		
 		String view = "ichat/ichat";
 		try {
-			if (session != null) {
-				session.invalidate();
+			if (device != null && (device.isMobile() || device.isTablet())) {
+				session.setAttribute("channel", "MO");
+			} else {
+				session.setAttribute("channel", "PC");
 			}
-			session = request.getSession();
-
-			if (session != null) {
-				session.setAttribute("loginVO",  null);
-				if (device != null && (device.isMobile() || device.isTablet())) {
-					session.setAttribute("channel", "MO");
-				} else {
-					session.setAttribute("channel", "PC");
+			if (key != null) {
+				if (sso != null && !key.equals(sso.getSessionId())) {
+					session.invalidate();
+					session = request.getSession();
 				}
-
-				if (key != null) {
-					//LOGGER.info(">>>>>> key is : {}", key);
-					LoginVO tryKey = new LoginVO();
-					tryKey.setKey(key);
-					try {
-						sso = sportsDbService.ssoProcess(tryKey, request.getRemoteAddr());
-						//LOGGER.info(">>>>>> key sso : {}", sso);
-					} catch (IChatException e) {
-						sso = null;
-						//LOGGER.info(">>>>>> key error : {} - {}", key, e.getMessage());
-					}
-					session.setAttribute("loginVO",  sso);
+				//LOGGER.info(">>>>>> key is : {}", key);
+				LoginVO tryKey = new LoginVO();
+				tryKey.setKey(key);
+				LoginVO tmpSso = null;
+				try {
+					tmpSso = sportsDbService.ssoProcess(tryKey, request.getRemoteAddr());
+					//LOGGER.info(">>>>>> key sso : {}", sso);
+				} catch (IChatException e) {
+					LOGGER.info(">>>>>> key error : {} - {}", tmpSso, e.getMessage());
 				}
-
-				String userId = "NOT_LOGIN";
+				if (tmpSso != null) {
+					sso = tmpSso;
+				}
+				session.setAttribute("loginVO", sso);
 				if (sso != null) {
 					userId = sso.getUserId();
 				}
-				session.setAttribute("encUserId", aes256.aesEncode(userId));
-				session.setAttribute("userId", userId);
-
-				LOGGER.info(">>>>>> session is :" + session.getAttribute("logSeq"));
-
-				//세션에 logSeq값이 없을 경우;					
-				logSeq = SequenceUtil.getDBKey();
-				session.setAttribute("logSeq", logSeq);
-				LOGGER.info(">>>>>> new logSeq is :" + logSeq);
-
-				if(type!=null) {
-					session.setAttribute("type", type);
-				}else {
-					session.setAttribute("type", "");
-				}
 			}
 
-			
+			session.setAttribute("encUserId", aes256.aesEncode(userId));
+			session.setAttribute("userId", userId);
+
+			String logSeq = (String) session.getAttribute("logSeq");
+			LOGGER.info(">>>>>> session is : {}", logSeq);
+			//세션에 log Sequence 값이 없을 경우;
+			if (logSeq == null) {
+				logSeq = SequenceUtil.getDBKey();
+				session.setAttribute("logSeq", logSeq);
+				LOGGER.info(">>>>>> new logSeq is : {}", logSeq);
+			}
+
+			if (type != null) {
+				session.setAttribute("type", type);
+			} else {
+				session.setAttribute("type", "");
+			}
+
 			model.addAttribute("logSeq", logSeq);
 			model.addAttribute("type", type);
 
 			String storageDateTime = new SimpleDateFormat("yyyyMMddHHmmss",Locale.KOREA).format(new Date());
 
 			model.addAttribute("cbotStatus",  cbotStatus);
-			if(logSeq!=null) {
+			if (logSeq != null) {
 				model.addAttribute("encChatLog",  codec.encode(aes256.aesEncode(logSeq)));
-			}else {
+			} else {
 				model.addAttribute("encChatLog",  "");
 			}
 			
@@ -219,7 +211,7 @@ public class iChatController {
 				}
 			}
 			
-			Map<String, Object> qMap = new HashMap<String,Object>();
+			Map<String, Object> qMap = new HashMap<>();
 			qMap.put("projectId", projectId);
 			List<Map<String, String>> quickMenuList = quickMenuService.selectQuickMenuList(qMap);
 			System.out.println("quickMenu :::::::::: " +  quickMenuList.size());
@@ -240,116 +232,6 @@ public class iChatController {
 				 | NoSuchPaddingException | InvalidAlgorithmParameterException | IllegalBlockSizeException
 				 | BadPaddingException | EncoderException | NullPointerException e)
 		{
-			LOGGER.error("[iChat page Error] page : /iChat");
-		}
-		
-		return view;
-	}
-	
-	@RequestMapping(value = "/iChatView", method = RequestMethod.GET)
-	public String iChatView(Locale locale, Model model, HttpServletRequest request) throws Exception {
-		String type = request.getParameter("type");
-		
-		boolean cbotStatus = true;
-
-		URLCodec codec = new URLCodec();
-		String logSeq = null;
-		
-		String view = "ichat/ichat_view";
-		try {
-			HttpSession session = request.getSession();
-
-			String userId = request.getParameter("userId");
-
-			if(userId != null) {
-
-				AES256Util aes256 = new AES256Util();
-				String decUserId = aes256.aesDecode(userId);
-
-				session.setAttribute("encUserId", userId);
-				session.setAttribute("userId", decUserId);
-
-			} else {
-
-				userId = "NOT_LOGIN";
-				session.setAttribute("encUserId", userId);
-			session.setAttribute("userId", userId);
-			}
-
-			LOGGER.info(">>>>>> session is :" + session.getAttribute("logSeq"));
-			
-			
-			if(session !=null ) {
-				//세션에 logSeq값이 없을 경우;					
-				logSeq = SequenceUtil.getDBKey();
-				session.setAttribute("logSeq", logSeq);
-				LOGGER.info(">>>>>> new logSeq is :" + logSeq);
-			}
-			
-			if(type!=null) {
-				session.setAttribute("type", type);
-			}else {
-				session.setAttribute("type", "");
-			}
-			
-			model.addAttribute("logSeq", logSeq);
-			model.addAttribute("type", type);
-			
-			
-			String storageDateTime = new SimpleDateFormat("yyyyMMddHHmmss",Locale.KOREA).format(new Date());
-			
-			AES256Util aes256 = new AES256Util();			
-			model.addAttribute("cbotStatus",  cbotStatus);
-			if(logSeq!=null) {
-				model.addAttribute("encChatLog",  codec.encode(aes256.aesEncode(logSeq)));
-			}else {
-				model.addAttribute("encChatLog",  "");
-			}
-			
-			//프로젝트  관리자 / 사용자 구분
-			String code = request.getParameter("code");
-			String projectId = propertiesService.dmProjectId;
-			String projectCode = propertiesService.chatProjectCode + storageDateTime.substring(0, 8);
-			//String projectCode = "대한진진20211123";
-			//projectCode = sha256Encrypt(projectCode);
-			projectCode = getSHA256(projectCode);
-			if(code != null && !"null".equals(code) ) {
-				LOGGER.debug(code + ":  code is not null");
-				LOGGER.debug(projectCode + ":  projectCode is not null");
-				if(code.equals(projectCode)) {
-					projectId = propertiesService.dmAdminProjectId;
-					view = "ichat/adminIchat";
-				}
-			}
-			
-			Map<String, Object> qMap = new HashMap<String,Object>();
-			qMap.put("projectId", projectId);
-			List<Map<String, String>> quickMenuList = quickMenuService.selectQuickMenuList(qMap);
-			System.out.println("quickMenu :::::::::: " +  quickMenuList.size());
-			model.addAttribute("quickMenuList", quickMenuList);
-			model.addAttribute("projectId", projectId);
-			
-			//model.addAttribute("encChatLog",  codec.encode(aes256.aesEncode(logSeq)));
-			model.addAttribute("serverTime",  storageDateTime);
-			//model.addAttribute("userId",  session.getAttribute("encUserId"));
-			model.addAttribute("userId",  "");
-			Map<String, String> feedbackQuestion = feedbackService.selectFeedbackSettingDetail(projectId);
-			model.addAttribute("feedbackQuestion", feedbackQuestion);
-		} catch (UnsupportedEncodingException e) {
-			LOGGER.error("[iChat page Error] page : /iChat");
-		} catch (InvalidKeyException e) {
-			LOGGER.error("[iChat page Error] page : /iChat");
-		} catch (NoSuchAlgorithmException e) {
-			LOGGER.error("[iChat page Error] page : /iChat");
-		} catch (NoSuchPaddingException e) {
-			LOGGER.error("[iChat page Error] page : /iChat");
-		} catch (InvalidAlgorithmParameterException e) {
-			LOGGER.error("[iChat page Error] page : /iChat");
-		} catch (IllegalBlockSizeException e) {
-			LOGGER.error("[iChat page Error] page : /iChat");
-		} catch (BadPaddingException e) {
-			LOGGER.error("[iChat page Error] page : /iChat");
-		} catch (EncoderException e) {
 			LOGGER.error("[iChat page Error] page : /iChat");
 		}
 		

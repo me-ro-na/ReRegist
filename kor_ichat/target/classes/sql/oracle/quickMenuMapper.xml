@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="quickMenu">
+
+	<select id="selectQuickMenuList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	<![CDATA[
+		SELECT
+			   A.QUICKMENU_ID,
+			   A.QUICKMENU_NM,
+			   A.IMAGE_SEQ,
+			   A.INTENT,
+			   A.PROJECTID,
+			   A.MAINUSERQUERY,
+			   B.IMAGE_ID,
+			   B.IMAGE_NAME,
+			   B.IMAGE_FILENAME,
+			   B.IMAGE_FILESERVERNAME,
+			   B.IMAGE_DEFAULT_YN,
+			   B.IMAGE_ATTRIBUTE
+		FROM WISE_QUICKMENU A
+		   , WISE_UPLOADIMAGE B
+		WHERE A.IMAGE_SEQ=B.IMAGE_SEQ
+		  AND A.PROJECTID = #{projectId}
+		ORDER BY A.SORT_SEQ ASC
+    ]]>
+	</select>
+</mapper>

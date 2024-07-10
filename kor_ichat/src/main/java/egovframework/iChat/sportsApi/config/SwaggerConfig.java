@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -22,7 +23,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-@EnableWebMvc
 public class SwaggerConfig {
 
     @Bean
@@ -34,7 +34,7 @@ public class SwaggerConfig {
                 .globalResponseMessage(RequestMethod.POST, getArrayList())
                 .apiInfo(getApiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("egovframework.iChat.sportsApi.ctrl"))
+                .apis(RequestHandlerSelectors.basePackage("egovframework.iChat.sportsApi.ctrl2"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -67,4 +67,6 @@ public class SwaggerConfig {
         lists.add(new ResponseMessageBuilder().code(401).message("401 ERROR").build());
         return lists;
     }
+
+
 }

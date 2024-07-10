@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="search">
+    <cache
+        eviction="LRU"
+        flushInterval="60000"
+        size="1024"
+        readOnly="true"
+    />
+
+    <resultMap id="collectionMap" type="egovframework.iChat.sf1.model.SearchCollection">
+        <association property="filters" column="{projectId=PROJECTID,clctSeq=CLCT_SEQ}" javaType="java.util.List" select="selectFilterList"/>
+    </resultMap>
+
+     <!-- 검색 컬렉션 조회 -->
+    <select id="selectSearchCollection" resultMap="collectionMap" parameterType="java.util.HashMap">
+		SELECT PROJECTID
+			 , CLCT_SEQ
+			 , CLCT_NAME
+             , CLCT_DESC
+             , CLCT_MSG
+             , SORT_FLD
+             , SRCH_FLD
+             , SRCH_RANK
+             , DOC_FLD
+             , RSLT_CNT
+             , RSLT_HGHL
+             , OR_EXTD
+		  FROM WISE_SRCH_CLCT
+		 WHERE PROJECTID = #{projectId}
+           AND CLCT_NAME = #{collection}
+           AND USE_YN = 'Y'
+    </select>
+
+    <resultMap id="filterMap" type="egovframework.iChat.sf1.model.SearchFilter">
+        <association property="words" column="{projectId=PROJECTID,clctSeq=CLCT_SEQ,fltrSeq=FLTR_SEQ}" javaType="java.util.List" select="selectWordList"/>
+    </resultMap>
+
+    <!-- 검색 컬렉션 필터 조회 -->
+    <select id="selectFilterList" resultMap="filterMap" parameterType="java.util.HashMap">
+        SELECT PROJECTID
+             , CLCT_SEQ
+             , FLTR_SEQ
+             , GRP_NAME
+             , FLTR_NAME
+             , FLTR_DESC
+             , FLTR_TYPE
+             , FLTR_FLD
+             , FLTR_MTHD
+             , USE_YN
+          FROM WISE_SRCH_FLTR
+         WHERE PROJECTID = #{projectId}
+           AND CLCT_SEQ = #{clctSeq}
+           AND USE_YN = 'Y'
+         ORDER BY IF(FLTR_TYPE = 'F', 1, 2), FLTR_SEQ
+    </select>
+
+    <!-- 검색 컬렉션 필터 소속 단어 조회 -->
+    <select id="selectWordList" resultType="String" parameterType="java.util.HashMap">
+        SELECT SRCH_WORD
+          FROM WISE_SRCH_WORD
+         WHERE PROJECTID = #{projectId}
+           AND CLCT_SEQ = #{clctSeq}
+           AND FLTR_SEQ = #{fltrSeq}
+    </select>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+		
+	<beans>
+		<util:properties id="dbProp" location="classpath:config/properties/datasource.properties"/>
+		<util:properties id="dmProp" location="classpath:config/properties/dm.properties"/>
+	</beans>
+
+
+	<!-- <beans profile="local">
+		<util:properties id="dbProp" location="classpath:config/properties_local/datasource.properties"/>
+		<util:properties id="dmProp" location="classpath:config/properties_local/dm.properties"/>
+	</beans>
+	
+	<beans profile="dev">
+		<util:properties id="dbProp" location="classpath:config/properties_dev/datasource.properties"/>
+		<util:properties id="dmProp" location="classpath:config/properties_dev/dm.properties"/>
+	</beans>
+	
+	<beans profile="prod">
+		<util:properties id="dbProp" location="classpath:config/properties_prod/datasource.properties"/>
+		<util:properties id="dmProp" location="classpath:config/properties_prod/dm.properties"/>
+	</beans>
+ -->
+	<beans>
+		<import resource="context-datasource.xml"/>
+		<import resource="context-mapper.xml"/>
+		<import resource="context-aspect.xml"/>
+		<import resource="context-common.xml"/>
+		<!-- <import resource="security-context.xml"/>
+		<import resource="context-resource.xml"/>
+		<import resource="context-scheduler.xml"/> -->
+	</beans>
+</beans>

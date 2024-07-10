@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:config/properties/datasource.properties
+				</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="dataSourceSpied"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName"
+			value="${jdbc.default.driverClassName}" />
+		<property name="url" value="${jdbc.default.url}" />
+		<property name="username" value="${jdbc.default.username}" />
+		<property name="password" value="${jdbc.default.password}" />
+
+		<!-- <property name="url" value="jdbc:oracle:thin:@192.168.100.1:1521/orcl" 
+			/> <property name="username" value="devcbot" /> <property name="password" 
+			value="wisenut21" /> -->
+
+
+		<property name="initialSize" value="5" />
+		<property name="maxActive" value="10" />
+		<property name="maxIdle" value="5" />
+		<property name="minIdle" value="2" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="testWhileIdle" value="true" />
+		<property name="minEvictableIdleTimeMillis" value="10000" />
+		<property name="timeBetweenEvictionRunsMillis" value="300000" />
+		<property name="numTestsPerEvictionRun" value="5" />
+		<property name="validationQuery" value="select 1 FROM DUAL" />
+		<property name="removeAbandonedTimeout" value="60" />
+		<property name="removeAbandoned" value="true" />
+		<property name="logAbandoned" value="true" />
+	</bean>
+	<!-- <bean id="dataSourceSpied" class="org.apache.commons.dbcp.BasicDataSource" 
+		destroy-method="close"> <property name="driverClassName" value="com.mysql.jdbc.Driver" 
+		/> <property name="url" value="jdbc:mysql://192.168.100.1:3306/wiseichat?characterEncoding=utf-8" 
+		/> <property name="username" value="wisenut" /> <property name="password" 
+		value="wisenut@!" /> <property name="initialSize" value="5" /> <property 
+		name="maxActive" value="10" /> <property name="maxIdle" value="5" /> <property 
+		name="minIdle" value="2" /> <property name="testOnBorrow" value="true" /> 
+		<property name="testOnReturn" value="true" /> <property name="testWhileIdle" 
+		value="true" /> <property name="minEvictableIdleTimeMillis" value="10000" 
+		/> <property name="timeBetweenEvictionRunsMillis" value="300000" /> <property 
+		name="numTestsPerEvictionRun" value="5" /> <property name="validationQuery" 
+		value="select 1"/> <property name="removeAbandonedTimeout" value="60" /> 
+		<property name="removeAbandoned" value="true" /> <property name="logAbandoned" 
+		value="true" /> </bean> -->
+
+	<bean id="dataSource"
+		class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+		<constructor-arg ref="dataSourceSpied" />
+		<property name="logFormatter">
+			<bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+				<property name="loggingType" value="MULTI_LINE" />
+				<property name="sqlPrefix" value="SQL         :  " />
+			</bean>
+		</property>
+	</bean>
+</beans>
+

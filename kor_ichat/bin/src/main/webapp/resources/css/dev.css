@@ -1,0 +1,5 @@
+.btn_inner.link{overflow: hidden;text-overflow: ellipsis;white-space: nowrap;padding-right: 20px;}
+.bottom_inner {background-color: #65a6f1;}
+@media (min-width:100px) and (max-width:374px){
+    .chat_top{background: url(../img/bg_top_m.png) right 0 no-repeat #1E6CF1;background-size: cover;}
+}
